@@ -1,6 +1,6 @@
 'use strict';
-// TODO: Install and require the node postgres package 'pg' into your server.js, and ensure that it's now a new dependency in your package.json
-// const pg = require('pg');
+// DONE: Install and require the node postgres package 'pg' into your server.js, and ensure that it's now a new dependency in your package.json
+const pg = require('pg');
 const express = require('express');
 // REVIEW: Require in body-parser for post requests in our server
 const bodyParser = require('body-parser');
@@ -69,15 +69,24 @@ app.post('/articles', function(request, response) {
 
 app.put('/articles/:id', function(request, response) {
   client.query(
-    ``, // TODO: Write the SQL query to UPDATE an existing record
-    [] // TODO: Get each value from the request's body
+    `UPDATE articles(title, author, "authorUrl", category, "publishedOn", body)
+     SET VALUES ($1, $2, $3, $4, $5, $6);`, // DONE: Write the SQL query to UPDATE an existing record
+    [
+      request.body.title,
+      request.body.author,
+      request.body.authorUrl,
+      request.body.category,
+      request.body.publishedOn,
+      request.body.body
+    ] // DONE: Get each value from the request's body
   );
   response.send('update complete');
 });
 
 app.delete('/articles/:id', function(request, response) {
   client.query(
-    ``, // TODO: Write the SQL query to DELETE a record
+    `DELETE FROM articles
+    WHERE article_id = $1`, // DONE: Write the SQL query to DELETE a record
     [request.params.id]
   );
   response.send('Delete complete');
@@ -85,7 +94,7 @@ app.delete('/articles/:id', function(request, response) {
 
 app.delete('/articles', function(request, response) {
   client.query(
-    '' // TODO: Write the SQl query to truncate the table
+    'DELETE TABLE articles' // DONE: Write the SQl query to truncate the table
   );
   response.send('Delete complete');
 });

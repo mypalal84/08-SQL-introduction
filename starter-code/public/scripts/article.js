@@ -75,9 +75,9 @@ Article.fetchAll = function(callback) {
   .then(
     function(results) {
       if (results.length) { // If records exist in the DB
-        // DONE: load all of the records that exist in the database, then invoke callback(need help explaining this)?????
+        // DONE: load all of the records that exist in the database, then invoke callback
         Article.loadAll(results);
-        callback();
+        callback();//calls initIndexPage
       } else { // if NO records exist in the DB
         // DONE: ajax call to getJSON raw data from hackerIpsum.json. then the forEach method will iterate through the raw data, then i need help explaining the rest of this?????
         $.getJSON('./data/hackerIpsum.json')
@@ -87,7 +87,7 @@ Article.fetchAll = function(callback) {
             article.insertRecord(); // Add each record to the DB
           })
         })
-        // DONE: The fetchAll method calls itself with the parameter of callback????? it will do this until the if statement is true.
+        // DONE: The fetchAll method calls itself. it will do this until the if statement is true.
         .then(function() {
           Article.fetchAll(callback);
         })
@@ -115,10 +115,10 @@ Article.truncateTable = function(callback) {
     url: '/articles',
     method: 'DELETE',
   })
-  // DONE: after the ajax request, this is going to log to the console that the table was deleted, and runs callback function if it exists?????
+  // DONE: after the ajax request, this is going to log to the console that the table was deleted.
   .then(function(data) {
     console.log(data);
-    if (callback) callback();
+    if (callback) callback();//if there's a callback, run callback
   });
 };
 
@@ -128,13 +128,13 @@ Article.truncateTable = function(callback) {
 /**
  * OVERVIEW of
  * - A post method of Article that inserts a new instance of Article to the table, then logs it to the console
- * - Inputs: callback?????
+ * - Inputs: possible callback
  * - Outputs: a log to the console of the data inserted to the table
  */
 Article.prototype.insertRecord = function(callback) {
   // DONE: ajax call to post an instance of Article to /articles filepath
   $.post('/articles', {author: this.author, authorUrl: this.authorUrl, body: this.body, category: this.category, publishedOn: this.publishedOn, title: this.title})
-  // DONE: after the ajax call, the posted article will be logged to the console.  callback?????
+  // DONE: after the ajax call, the posted article will be logged to the console. if theres a callback, run callback()
   .then(function(data) {
     console.log(data);
     if (callback) callback();
@@ -146,8 +146,8 @@ Article.prototype.insertRecord = function(callback) {
 // DONE
 /**
  * OVERVIEW of
- * - This method will delete a specific article by id. It will then log that information to the console. callback?????
- * - Inputs: callback????? this.article_id
+ * - This method will delete a specific article by id. It will then log that information to the console.
+ * - Inputs: possible callback, this.article_id
  * - Outputs: removal of article and logging that to the console
  */
 Article.prototype.deleteRecord = function(callback) {
@@ -156,7 +156,7 @@ Article.prototype.deleteRecord = function(callback) {
     url: `/articles/${this.article_id}`,
     method: 'DELETE'
   })
-  // DONE: after the ajax call and deletion, that deletion will be logged to the console. callback?????
+  // DONE: after the ajax call and deletion, that deletion will be logged to the console. if theres a callback, run callback()
   .then(function(data) {
     console.log(data);
     if (callback) callback();
@@ -169,7 +169,7 @@ Article.prototype.deleteRecord = function(callback) {
 /**
  * OVERVIEW of
  * - This method will update a specific record by using the put method on a specific article with an id.
- * - Inputs: callback?????, article id, data
+ * - Inputs: possible callback, article id, data
  * - Outputs: updated table data
  */
 Article.prototype.updateRecord = function(callback) {
@@ -186,7 +186,7 @@ Article.prototype.updateRecord = function(callback) {
       title: this.title
     }
   })
-  // DONE: after the information is added, log that to the console. callback?????
+  // DONE: after the information is added, log that to the console. if theres a callback, run callback()
   .then(function(data) {
     console.log(data);
     if (callback) callback();
