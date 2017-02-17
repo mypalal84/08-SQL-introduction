@@ -40,20 +40,20 @@ Article.prototype.toHtml = function() {
 
 // ++++++++++++++++++++++++++++++++++++++
 
-// TODO
+// DONE
 /**
  * OVERVIEW of
- * - Describe what the method does
- * - Inputs: identify any inputs and their source
- * - Outputs: identify any outputs and their destination
+ * - A method of Article that instantiates all the articles based on their publishedOn Date. It loads all the data into the Article.all array
+ * - Inputs: the rows parameter which is an array of data coming from /articles.
+ * - Outputs: all the rows of Article stored in an array attached to Article.
  */
 Article.loadAll = function(rows) {
-  // TODO: describe what the following code is doing
+  // DONE: rows is a parameter, and the sort method in this case will take 2 instances of a publishedOn date. the callback function will return the difference between the published on dates of a and b. the callback function will be called when rows.sort executes. it returns a Date object.
   rows.sort(function(a,b) {
     return (new Date(b.publishedOn)) - (new Date(a.publishedOn));
   });
 
-  // TODO: describe what the following code is doing
+  // forEach will iterate through all of the rows. the callback function will then take all the new Article data for each row, and push into the Article.all aray. rows is an array of Article objects. callback function is invoked when rows.forEach executes.  ele is a placeholder parameter that refers to the "elements" within an array.
   rows.forEach(function(ele) {
     Article.all.push(new Article(ele));
   })
@@ -61,25 +61,25 @@ Article.loadAll = function(rows) {
 
 // ++++++++++++++++++++++++++++++++++++++
 
-// TODO
+// DONE
 /**
  * OVERVIEW of
- * - Describe what the method does
- * - Inputs: identify any inputs and their source
- * - Outputs: identify any outputs and their destination
+ * - this method will retrieve the data from either a local or remote source, depending on if it exists in the database. if data exists, Article.loadAll will execute. if not, it will get it from hackerIpsum.json(data folder) and add it to the database. it will keep calling itself as long as there are things to be imported.
+ * - Inputs: callback function of the articleView.initIndexPage method, which is in the articleView.js file and is invoked at the end of the index.html page
+ * - Outputs: identify any outputs and their destination?????
  */
 Article.fetchAll = function(callback) {
-  // TODO: describe what the following code is doing
+  // DONE: ajax call to get data from /articles in server.js
   $.get('/articles')
-  // TODO: describe what the following code is doing
+  // DONE: after ajax call, run a function with the parameter results(records in the database). if results exist: {
   .then(
     function(results) {
       if (results.length) { // If records exist in the DB
-        // TODO: describe what the following code is doing
+        // DONE: load all of the records that exist in the database, then invoke callback(need help explaining this)?????
         Article.loadAll(results);
         callback();
       } else { // if NO records exist in the DB
-        // TODO: describe what the following code is doing
+        // DONE: ajax call to getJSON raw data from hackerIpsum.json. then the forEach method will iterate through the raw data, then i need help explaining the rest of this?????
         $.getJSON('./data/hackerIpsum.json')
         .then(function(rawData) {
           rawData.forEach(function(item) {
@@ -87,11 +87,11 @@ Article.fetchAll = function(callback) {
             article.insertRecord(); // Add each record to the DB
           })
         })
-        // TODO: describe what the following code is doing
+        // DONE: The fetchAll method calls itself with the parameter of callback????? it will do this until the if statement is true.
         .then(function() {
           Article.fetchAll(callback);
         })
-        // TODO: describe what the following code is doing
+        // DONE: throw an error message if the if and else statements both fail?????
         .catch(function(err) {
           console.error(err);
         });
@@ -105,17 +105,17 @@ Article.fetchAll = function(callback) {
 // TODO
 /**
  * OVERVIEW of
- * - Describe what the method does
- * - Inputs: identify any inputs and their source
- * - Outputs: identify any outputs and their destination
+ * - Deletes all of the data in the table
+ * - Inputs: callback(placeholder parameter)
+ * - Outputs: identify any outputs and their destination?????
  */
 Article.truncateTable = function(callback) {
-  // TODO: describe what the following code is doing
+  // DONE: ajax request to server.js to the url of articles with the method of delete. The app.delete method will then be called.
   $.ajax({
     url: '/articles',
     method: 'DELETE',
   })
-  // TODO: describe what the following code is doing
+  // DONE: after the ajax request, this is going to log to the console that the table was deleted, and runs callback function if it exists?????
   .then(function(data) {
     console.log(data);
     if (callback) callback();
@@ -124,17 +124,17 @@ Article.truncateTable = function(callback) {
 
 // ++++++++++++++++++++++++++++++++++++++
 
-// TODO
+// DONE
 /**
  * OVERVIEW of
- * - Describe what the method does
- * - Inputs: identify any inputs and their source
- * - Outputs: identify any outputs and their destination
+ * - A post method of Article that inserts a new instance of Article to the table, then logs it to the console
+ * - Inputs: callback?????
+ * - Outputs: a log to the console of the data inserted to the table
  */
 Article.prototype.insertRecord = function(callback) {
-  // TODO: describe what the following code is doing
+  // DONE: ajax call to post an instance of Article to /articles filepath
   $.post('/articles', {author: this.author, authorUrl: this.authorUrl, body: this.body, category: this.category, publishedOn: this.publishedOn, title: this.title})
-  // TODO: describe what the following code is doing
+  // DONE: after the ajax call, the posted article will be logged to the console.  callback?????
   .then(function(data) {
     console.log(data);
     if (callback) callback();
@@ -143,20 +143,20 @@ Article.prototype.insertRecord = function(callback) {
 
 // ++++++++++++++++++++++++++++++++++++++
 
-// TODO
+// DONE
 /**
  * OVERVIEW of
- * - Describe what the method does
- * - Inputs: identify any inputs and their source
- * - Outputs: identify any outputs and their destination
+ * - This method will delete a specific article by id. It will then log that information to the console. callback?????
+ * - Inputs: callback????? this.article_id
+ * - Outputs: removal of article and logging that to the console
  */
 Article.prototype.deleteRecord = function(callback) {
-  // TODO: describe what the following code is doing
+  // DONE: ajax call to delete an article with this.article_id
   $.ajax({
     url: `/articles/${this.article_id}`,
     method: 'DELETE'
   })
-  // TODO: describe what the following code is doing
+  // DONE: after the ajax call and deletion, that deletion will be logged to the console. callback?????
   .then(function(data) {
     console.log(data);
     if (callback) callback();
@@ -165,19 +165,19 @@ Article.prototype.deleteRecord = function(callback) {
 
 // ++++++++++++++++++++++++++++++++++++++
 
-// TODO
+// DONE
 /**
  * OVERVIEW of
- * - Describe what the method does
- * - Inputs: identify any inputs and their source
- * - Outputs: identify any outputs and their destination
+ * - This method will update a specific record by using the put method on a specific article with an id.
+ * - Inputs: callback?????, article id, data
+ * - Outputs: updated table data
  */
 Article.prototype.updateRecord = function(callback) {
-  // TODO: describe what the following code is doing
+  // DONE: ajax call. uses the put method on this article instance's id.
   $.ajax({
     url: `/articles/${this.article_id}`,
     method: 'PUT',
-    data: {  // TODO: describe what this object is doing
+    data: {  // DONE: taking in the new information and adding as a new instance
       author: this.author,
       authorUrl: this.authorUrl,
       body: this.body,
@@ -186,7 +186,7 @@ Article.prototype.updateRecord = function(callback) {
       title: this.title
     }
   })
-  // TODO: describe what the following code is doing
+  // DONE: after the information is added, log that to the console. callback?????
   .then(function(data) {
     console.log(data);
     if (callback) callback();
